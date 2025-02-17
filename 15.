@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_INSTRUCTIONS 100
+#define MAX_LEN 100
+
+typedef struct {
+    char op[MAX_LEN];
+    char arg1[MAX_LEN];
+    char arg2[MAX_LEN];
+    char result[MAX_LEN];
+} Instruction;
+
+void generate_assembly_code(Instruction instructions[], int count) {
+    for (int i = 0; i < count; i++) {
+        if (strcmp(instructions[i].op, "+") == 0) {
+            printf("MOV R0, %s\n", instructions[i].arg1);
+            printf("ADD R0, %s\n", instructions[i].arg2);
+            printf("MOV %s, R0\n", instructions[i].result);
+        } else if (strcmp(instructions[i].op, "-") == 0) {
+            printf("MOV R0, %s\n", instructions[i].arg1);
+            printf("SUB R0, %s\n", instructions[i].arg2);
+            printf("MOV %s, R0\n", instructions[i].result);
+        } else if (strcmp(instructions[i].op, "*") == 0) {
+            printf("MOV R0, %s\n", instructions[i].arg1);
+            printf("MUL R0, %s\n", instructions[i].arg2);
+            printf("MOV %s, R0\n", instructions[i].result);
+        } else if (strcmp(instructions[i].op, "/") == 0) {
+            printf("MOV R0, %s\n", instructions[i].arg1);
+            printf("DIV R0, %s\n", instructions[i].arg2);
+            printf("MOV %s, R0\n", instructions[i].result);
+        }
+    }
+}
+
+int main() {
+    Instruction instructions[MAX_INSTRUCTIONS];
+    int count = 0;
+
+    strcpy(instructions[count].op, "+");
+    strcpy(instructions[count].arg1, "a");
+    strcpy(instructions[count].arg2, "b");
+    strcpy(instructions[count].result, "t1");
+    count++;
+
+    strcpy(instructions[count].op, "*");
+    strcpy(instructions[count].arg1, "t1");
+    strcpy(instructions[count].arg2, "c");
+    strcpy(instructions[count].result, "t2");
+    count++;
+
+    strcpy(instructions[count].op, "-");
+    strcpy(instructions[count].arg1, "t2");
+    strcpy(instructions[count].arg2, "d");
+    strcpy(instructions[count].result, "t3");
+    count++;
+
+    generate_assembly_code(instructions, count);
+
+    return 0;
+}
