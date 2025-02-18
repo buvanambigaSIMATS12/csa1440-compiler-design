@@ -1,0 +1,29 @@
+%{
+#include <stdio.h>
+
+int isValid = 0; // Assume mobile number is invalid initially
+%}
+
+%%
+
+^[6-9][0-9]{9}$  { isValid = 1; } // Valid mobile number pattern
+.*               { isValid = 0; } // Invalid mobile number pattern
+
+%%
+
+int main(int argc, char **argv) {
+    printf("Enter a mobile number: ");
+    yylex();
+
+    if (isValid) {
+        printf("The mobile number is valid.\n");
+    } else {
+        printf("The mobile number is invalid.\n");
+    }
+
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
