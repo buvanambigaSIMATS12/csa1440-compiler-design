@@ -1,0 +1,39 @@
+%{
+#include <stdio.h>
+
+int macro_count = 0;
+int header_count = 0;
+%}
+
+%%
+^#define[ \t]+[A-Za-z_][A-Za-z0-9_]* { macro_count++; }  // Count macros
+^#include[ \t]+<[^>]+> { header_count++; }              // Count system header files
+^#include[ \t]+\"[^\"]+\" { header_count++; }           // Count user-defined header files
+.|\n                                                    ;  // Ignore everything else
+%%
+
+int main(int argc, char **argv) {
+    if (argc > 1) {
+        FILE *file = fopen(argv[1], "r");
+        if (!file) {
+            perror("Error opening file");
+            return 1;
+        }
+        yyin = file;
+    }
+
+    yylex();
+
+    printf("Number of macros defined: %d\n", macro_count);
+    printf("Number of header files included: %d\n", header_count);
+
+    if (argc > 1) {
+        fclose(yyin);
+    }
+
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
