@@ -1,0 +1,21 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+
+[0-9]+          { printf("Number: %s\n", yytext); }  // Recognizes numbers
+[a-zA-Z]+       { printf("Word: %s\n", yytext); }   // Recognizes words
+[ \t\n]+        ;                                   // Ignores whitespace
+.               ;                                   // Ignores any other character
+
+%%
+
+int main(int argc, char **argv) {
+    yylex();  // Calls the lexical analyzer
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
