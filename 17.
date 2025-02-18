@@ -1,0 +1,33 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+[0-9]+          { printf("Integer constant: %s\n", yytext); }  // Integer constants
+[0-9]+\.[0-9]+  { printf("Float constant: %s\n", yytext); }    // Float constants
+\'.\'           { printf("Character constant: %s\n", yytext); } // Character constants
+.|\n            ;  // Ignore everything else
+%%
+
+int main(int argc, char **argv) {
+    if (argc > 1) {
+        FILE *file = fopen(argv[1], "r");
+        if (!file) {
+            perror("Error opening file");
+            return 1;
+        }
+        yyin = file;
+    }
+
+    yylex();
+
+    if (argc > 1) {
+        fclose(yyin);
+    }
+
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
