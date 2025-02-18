@@ -1,0 +1,35 @@
+%{
+#include <stdio.h>
+#include <string.h>
+
+int word_count = 0;
+char target_word[100];
+
+void count_word(char *word) {
+    if (strcmp(word, target_word) == 0) {
+        word_count++;
+    }
+}
+%}
+
+%option noyywrap
+
+%%
+[a-zA-Z]+ {
+    count_word(yytext);
+}
+
+[ \t\n]+ ; // Ignore whitespace
+
+%%
+
+int main() {
+    printf("Enter the word to count: ");
+    scanf("%s", target_word);
+
+    printf("Enter the sentence: ");
+    yylex();
+
+    printf("The word '%s' occurs %d times in the given sentence.\n", target_word, word_count);
+    return 0;
+}
