@@ -1,0 +1,46 @@
+%{
+#include <stdio.h>
+#include <string.h>
+
+int keyword_count = 0;
+int identifier_count = 0;
+
+char *keywords[] = {
+    "if", "else", "for", "while", "do", "int", "float", "return", "char", "double", "void", "static", "const"
+};
+
+int is_keyword(char *str) {
+    for (int i = 0; i < sizeof(keywords) / sizeof(char *); i++) {
+        if (strcmp(str, keywords[i]) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+%}
+
+%option noyywrap
+
+%%
+
+[a-zA-Z][a-zA-Z0-9]* {
+    if (is_keyword(yytext)) {
+        keyword_count++;
+        printf("Keyword: %s\n", yytext);
+    } else {
+        identifier_count++;
+        printf("Identifier: %s\n", yytext);
+    }
+}
+
+[ \t\n] ; // Ignore whitespace
+
+%%
+
+int main() {
+    printf("Enter the code to parse: ");
+    yylex();
+    printf("Number of keywords: %d\n", keyword_count);
+    printf("Number of identifiers: %d\n", identifier_count);
+    return 0;
+}
