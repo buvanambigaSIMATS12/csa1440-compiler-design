@@ -1,0 +1,25 @@
+%{
+#include <stdio.h>
+%}
+
+%option noyywrap
+
+%%
+
+[a-zA-Z]+ {
+    printf("Word: %s\n", yytext);
+}
+
+"=="|">="|"<="|"!="|"<"|">" {
+    printf("Relational Operator: %s\n", yytext);
+}
+
+[ \t\n]+ ; // Ignore whitespace
+
+%%
+
+int main() {
+    printf("Enter the text (press Ctrl+D to end input):\n");
+    yylex();
+    return 0;
+}
